@@ -6,7 +6,7 @@ import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kmsoft.adsmanager.InterstitialAd;
+import com.kmsoft.adsmanager.ads.InterstitialAd;
 
 public class Ad_Interstitial extends AppCompatActivity {
 

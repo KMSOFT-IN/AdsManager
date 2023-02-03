@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.RelativeLayout;
 
-import com.kmsoft.adsmanager.RectangleAd;
+import com.kmsoft.adsmanager.ads.RectangleAd;
 
 public class Ad_Rectangle extends AppCompatActivity {
 

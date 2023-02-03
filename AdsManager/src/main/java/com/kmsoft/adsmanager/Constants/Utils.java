@@ -1,9 +1,8 @@
-package com.kmsoft.adsmanager;
+package com.kmsoft.adsmanager.Constants;
 
 import android.content.Context;
 
 import com.facebook.ads.AdSettings;
-import com.facebook.ads.AdSize;
 import com.facebook.ads.AudienceNetworkAds;
 
 import java.util.ArrayList;

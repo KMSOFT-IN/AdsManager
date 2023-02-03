@@ -5,7 +5,7 @@ import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kmsoft.adsmanager.BannerAd;
+import com.kmsoft.adsmanager.ads.BannerAd;
 
 public class Ad_Banner extends AppCompatActivity {
 

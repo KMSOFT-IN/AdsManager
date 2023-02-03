@@ -1,6 +1,6 @@
-package com.kmsoft.adsmanager;
+package com.kmsoft.adsmanager.ads;
 
-import static com.kmsoft.adsmanager.Utils.sorting;
+import static com.kmsoft.adsmanager.Constants.Utils.sorting;
 
 import android.content.Context;
 import android.os.Handler;
@@ -16,6 +16,7 @@ import com.facebook.ads.AdSize;
 import com.facebook.ads.AdView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
+import com.kmsoft.adsmanager.Constants.Utils;
 
 import java.util.List;
 

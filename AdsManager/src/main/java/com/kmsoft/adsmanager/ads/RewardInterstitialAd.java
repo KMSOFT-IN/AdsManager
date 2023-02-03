@@ -1,7 +1,7 @@
-package com.kmsoft.adsmanager;
+package com.kmsoft.adsmanager.ads;
 
 
-import static com.kmsoft.adsmanager.Utils.sorting;
+import static com.kmsoft.adsmanager.Constants.Utils.sorting;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,6 +22,10 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback;
+import com.kmsoft.adsmanager.Constants.Utils;
+import com.kmsoft.adsmanager.listener.FbRewardInterstitial;
+import com.kmsoft.adsmanager.listener.GoogleReward;
+import com.kmsoft.adsmanager.listener.GoogleRewardItem;
 
 import java.util.List;
 

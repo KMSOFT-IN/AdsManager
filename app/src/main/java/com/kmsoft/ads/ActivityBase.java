@@ -2,7 +2,7 @@ package com.kmsoft.ads;
 
 import android.app.Application;
 
-import com.kmsoft.adsmanager.Utils;
+import com.kmsoft.adsmanager.Constants.Utils;
 
 public class ActivityBase extends Application {
 

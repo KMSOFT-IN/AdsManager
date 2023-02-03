@@ -1,4 +1,4 @@
-package com.kmsoft.adsmanager;
+package com.kmsoft.adsmanager.listener;
 
 import androidx.annotation.NonNull;
 

@@ -6,12 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.kmsoft.adsmanager.FbReward;
-import com.kmsoft.adsmanager.FbRewardInterstitial;
-import com.kmsoft.adsmanager.GoogleReward;
-import com.kmsoft.adsmanager.GoogleRewardItem;
-import com.kmsoft.adsmanager.RewardInterstitialAd;
-import com.kmsoft.adsmanager.Reward_Ad;
+import com.kmsoft.adsmanager.listener.FbReward;
+import com.kmsoft.adsmanager.listener.FbRewardInterstitial;
+import com.kmsoft.adsmanager.listener.GoogleReward;
+import com.kmsoft.adsmanager.listener.GoogleRewardItem;
+import com.kmsoft.adsmanager.ads.RewardInterstitialAd;
+import com.kmsoft.adsmanager.ads.Reward_Ad;
 
 public class Ad_Reward extends AppCompatActivity implements FbReward, GoogleReward, FbRewardInterstitial {
 
