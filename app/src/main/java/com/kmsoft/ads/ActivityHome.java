@@ -10,7 +10,7 @@ import com.google.android.material.card.MaterialCardView;
 
 public class ActivityHome extends AppCompatActivity {
 
-    MaterialCardView cdBanner, cdInterstitial, cdRectangle, cdReward, cdNative,cdRewardIn;
+    MaterialCardView cdBanner, cdInterstitial, cdRectangle, cdReward,cdRewardIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +21,6 @@ public class ActivityHome extends AppCompatActivity {
         cdRectangle = findViewById(R.id.cdRectangle);
         cdInterstitial = findViewById(R.id.cdInterstitial);
         cdReward = findViewById(R.id.cdReward);
-        cdNative = findViewById(R.id.cdNative);
         cdRewardIn = findViewById(R.id.cdRewardIn);
 
         cdBanner.setOnClickListener(new View.OnClickListener() {
@@ -52,13 +51,6 @@ public class ActivityHome extends AppCompatActivity {
                 Intent intent = new Intent(ActivityHome.this, Ad_Reward.class);
                 intent.putExtra("isVideo",true);
                 startActivity(intent);
-            }
-        });
-
-        cdNative.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ActivityHome.this, Ad_Native.class));
             }
         });
 

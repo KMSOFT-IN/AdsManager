@@ -1,12 +1,16 @@
 package com.kmsoft.adsmanager;
 
+import android.content.Context;
+
+import com.facebook.ads.AdSettings;
 import com.facebook.ads.AdSize;
+import com.facebook.ads.AudienceNetworkAds;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ActivityConfig {
+public class Utils {
 
 
 //    static String FB_BANNER_90 = "910721003297246_910723819963631";
@@ -26,8 +30,16 @@ public class ActivityConfig {
     public static int fbPriority;
     public static int googlePriority;
 
-    public static AdSize fbBannerSize;
-    public static com.google.android.gms.ads.AdSize googleBannerSize;
+    public static int fbBannerHeight;
+    public static int googleBannerHeight;
+
+    public static void initialize(Context context){
+        AudienceNetworkAds.initialize(context);
+    }
+
+    public static void setTestMode(boolean result){
+        AdSettings.setTestMode(result);
+    }
 
     public static void setFbNative(String fbNative) {
         FB_NATIVE = fbNative;
@@ -70,27 +82,40 @@ public class ActivityConfig {
     }
 
     public static void setFbPriority(int fbPriority) {
-        ActivityConfig.fbPriority = fbPriority;
+        Utils.fbPriority = fbPriority;
     }
 
     public static void setGooglePriority(int googlePriority) {
-        ActivityConfig.googlePriority = googlePriority;
+        Utils.googlePriority = googlePriority;
     }
 
-    public static void setFbBannerSize(AdSize fbBannerSize) {
-        ActivityConfig.fbBannerSize = fbBannerSize;
+    public static void setGoogleBannerHeight(int googleBannerHeight) {
+
+        if (googleBannerHeight < 0 && googleBannerHeight != -2 && googleBannerHeight != -4) {
+            StringBuilder var5 = new StringBuilder();
+            var5.append("Invalid height for AdSize: ");
+            var5.append(googleBannerHeight);
+            throw new IllegalArgumentException(var5.toString());
+        }else {
+            Utils.googleBannerHeight = googleBannerHeight;
+        }
     }
 
-    public static void setGoogleBannerSize(com.google.android.gms.ads.AdSize googleBannerSize) {
-        ActivityConfig.googleBannerSize = googleBannerSize;
+    public static void setFbBannerHeight(int fbBannerHeight) {
+        if (fbBannerHeight == 50 || fbBannerHeight == 90 || fbBannerHeight == 250){
+            Utils.fbBannerHeight = fbBannerHeight;
+        }else {
+            throw new IllegalArgumentException("Can't create AdSize using this height. height should be 50,90,250");
+        }
+
     }
 
     public static List<Integer> sorting(){
 
         List<Integer> integerList = new ArrayList<>();
 
-        integerList.add(ActivityConfig.fbPriority);
-        integerList.add(ActivityConfig.googlePriority);
+        integerList.add(Utils.fbPriority);
+        integerList.add(Utils.googlePriority);
 
         Collections.sort(integerList, Collections.reverseOrder());
 

@@ -20,6 +20,8 @@ public class ActivitySplash extends AppCompatActivity {
         splashProgress = findViewById(R.id.splashProgress);
         playProgress();
 
+
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

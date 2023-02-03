@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".ActivityBase"
@@ -45,11 +44,7 @@
             android:name=".Ad_Reward"
             android:label="Reward Ad" />
 
-        <activity
-            android:name=".Ad_Native"
-            android:label="Native Ad" />
-
-<!--        <activity-->
+        <!--        <activity-->
 <!--            android:name=".Ad_Native_List"-->
 <!--            android:label="Native Ad List Style" />-->
 

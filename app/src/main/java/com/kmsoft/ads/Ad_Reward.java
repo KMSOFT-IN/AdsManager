@@ -6,16 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.facebook.ads.Ad;
-import com.facebook.ads.AdError;
-import com.facebook.ads.RewardedInterstitialAdListener;
-import com.facebook.ads.RewardedVideoAdListener;
-import com.google.android.gms.ads.OnUserEarnedRewardListener;
-import com.google.android.gms.ads.rewarded.RewardItem;
+import com.kmsoft.adsmanager.FbReward;
+import com.kmsoft.adsmanager.FbRewardInterstitial;
+import com.kmsoft.adsmanager.GoogleReward;
+import com.kmsoft.adsmanager.GoogleRewardItem;
 import com.kmsoft.adsmanager.RewardInterstitialAd;
 import com.kmsoft.adsmanager.Reward_Ad;
 
-public class Ad_Reward extends AppCompatActivity implements RewardedVideoAdListener, OnUserEarnedRewardListener,RewardedInterstitialAdListener {
+public class Ad_Reward extends AppCompatActivity implements FbReward, GoogleReward, FbRewardInterstitial {
 
     boolean isVideo;
     Reward_Ad reward_ad;
@@ -50,38 +48,21 @@ public class Ad_Reward extends AppCompatActivity implements RewardedVideoAdListe
     }
 
     @Override
-    public void onError(Ad ad, AdError adError) {
-        Toast.makeText(this, "Sorry, error on loading the ad. Try again!", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onAdLoaded(Ad ad) {
-
-    }
-
-    @Override
-    public void onAdClicked(Ad ad) {
-
-    }
-
-    @Override
-    public void onLoggingImpression(Ad ad) {
-
-    }
-
-    @Override
-    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-        int rewardAmount = rewardItem.getAmount();
-        String rewardType = rewardItem.getType();
-    }
-
-    @Override
     public void onRewardedInterstitialCompleted() {
-
+        Toast.makeText(this, "complete", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onRewardedInterstitialClosed() {
+        Toast.makeText(this, "closed", Toast.LENGTH_SHORT).show();
+    }
 
+    @Override
+    public void onUserEarnedReward(@NonNull GoogleRewardItem rewardItem) {
+        int rewardAmount = rewardItem.getAmount();
+        String rewardType = rewardItem.getType();
+
+        Toast.makeText(this, "amount : " + rewardAmount, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "type : " + rewardType, Toast.LENGTH_SHORT).show();
     }
 }

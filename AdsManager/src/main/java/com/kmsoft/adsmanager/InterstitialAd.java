@@ -1,6 +1,6 @@
 package com.kmsoft.adsmanager;
 
-import static com.kmsoft.adsmanager.ActivityConfig.sorting;
+import static com.kmsoft.adsmanager.Utils.sorting;
 
 import android.app.Activity;
 import android.content.Context;
@@ -45,7 +45,7 @@ public class InterstitialAd {
         AdRequest adRequest = new AdRequest.Builder().build();
         com.google.android.gms.ads.interstitial.InterstitialAd.load(
                 context,
-                ActivityConfig.GOOGLE_INTERSTITIAL,
+                Utils.GOOGLE_INTERSTITIAL,
                 adRequest,
                 new InterstitialAdLoadCallback() {
                     @Override
@@ -93,13 +93,13 @@ public class InterstitialAd {
 
         for (int i = 0; i < priorityList.size(); i++) {
 
-            if (priorityList.get(i) == ActivityConfig.fbPriority){
+            if (priorityList.get(i) == Utils.fbPriority){
                 if (FbInterstitialAd != null) {
                     FbInterstitialAd.show();
                     Toast.makeText(context, "fb Ad show", Toast.LENGTH_SHORT).show();
                     break;
                 }
-            } else if (priorityList.get(i) == ActivityConfig.googlePriority){
+            } else if (priorityList.get(i) == Utils.googlePriority){
                 if (googleInterstitialAd != null) {
                     googleInterstitialAd.show((Activity) context);
                     Toast.makeText(context, "google Ad show", Toast.LENGTH_SHORT).show();
@@ -110,12 +110,13 @@ public class InterstitialAd {
     }
 
     public void FbInterstitialAd() {
-        FbInterstitialAd = new com.facebook.ads.InterstitialAd(context, ActivityConfig.FB_INTERSTITIAL);
+        FbInterstitialAd = new com.facebook.ads.InterstitialAd(context, Utils.FB_INTERSTITIAL);
         AbstractAdListener adListener = new AbstractAdListener() {
             @Override
             public void onError(Ad ad, AdError error) {
                 Toast.makeText(context, "Error loading ad: " + error.getErrorMessage(), Toast.LENGTH_SHORT).show();
                 super.onError(ad, error);
+                FbInterstitialAd = null;
             }
 
             @Override

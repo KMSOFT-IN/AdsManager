@@ -1,6 +1,6 @@
 package com.kmsoft.adsmanager;
 
-import static com.kmsoft.adsmanager.ActivityConfig.sorting;
+import static com.kmsoft.adsmanager.Utils.sorting;
 
 import android.content.Context;
 import android.os.Handler;
@@ -35,7 +35,7 @@ public class RectangleAd {
 
     private void loadGoogleAd() {
         googleAdView = new com.google.android.gms.ads.AdView(context);
-        googleAdView.setAdUnitId(ActivityConfig.GOOGLE_BANNER_ID);
+        googleAdView.setAdUnitId(Utils.GOOGLE_BANNER_ID);
         googleAdView.setAdSize(AdSize.MEDIUM_RECTANGLE);
         AdRequest adRequest = new AdRequest.Builder().build();
         googleAdView.setAdListener(new com.google.android.gms.ads.AdListener() {
@@ -60,7 +60,7 @@ public class RectangleAd {
     }
 
     public void loadFbAd() {
-        fbAdView = new AdView(context, ActivityConfig.FB_RECTANGLE, com.facebook.ads.AdSize.RECTANGLE_HEIGHT_250);
+        fbAdView = new AdView(context, Utils.FB_RECTANGLE, com.facebook.ads.AdSize.RECTANGLE_HEIGHT_250);
         AdListener fbAdListener = new AdListener() {
             @Override
             public void onError(Ad ad, AdError adError) {
@@ -94,14 +94,14 @@ public class RectangleAd {
 
         for (int i = 0; i < priorityList.size(); i++) {
 
-            if (priorityList.get(i) == ActivityConfig.fbPriority) {
+            if (priorityList.get(i) == Utils.fbPriority) {
                 if (fbAd != null) {
                     adContainer.addView(fbAdView);
                     Toast.makeText(context, "fb Ad show", Toast.LENGTH_SHORT).show();
                     break;
                 }
 
-            } else if (priorityList.get(i) == ActivityConfig.googlePriority) {
+            } else if (priorityList.get(i) == Utils.googlePriority) {
                 if (isGoogleAdLoaded) {
                     adContainer.addView(googleAdView);
                     Toast.makeText(context, "google Ad show", Toast.LENGTH_SHORT).show();
