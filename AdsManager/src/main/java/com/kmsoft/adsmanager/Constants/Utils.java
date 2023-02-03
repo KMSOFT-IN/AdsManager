@@ -1,9 +1,19 @@
 package com.kmsoft.adsmanager.Constants;
 
+import static com.google.ads.AdRequest.LOGTAG;
+
 import android.content.Context;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.facebook.ads.AdSettings;
 import com.facebook.ads.AudienceNetworkAds;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.unity3d.ads.IUnityAdsInitializationListener;
+import com.unity3d.ads.UnityAds;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,19 +35,51 @@ public class Utils {
     public static String GOOGLE_REWARD;
     public static String GOOGLE_REWARD_INTERSTITIAL;
 
+    public static String UNITY_GAME_ID;
+    public static boolean isUnityTest;
+
+    public static String UNITY_BANNER_ID;
+    public static String UNITY_INTERSTITIAL_ID;
+    public static String UNITY_REWARD_ID;
+
     // TODO for highPriority set highNumber
     public static int fbPriority;
     public static int googlePriority;
+    public static int unityPriority;
 
     public static int fbBannerHeight;
     public static int googleBannerHeight;
+    public static int unityBannerHeight;
+    public static int unityBannerWidth;
 
     public static void initialize(Context context){
         AudienceNetworkAds.initialize(context);
+
+        // Initialize the Mobile Ads SDK.
+        MobileAds.initialize(context, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
+            }
+        });
+
+
     }
 
     public static void setTestMode(boolean result){
         AdSettings.setTestMode(result);
+        isUnityTest = result;
+    }
+
+    public static void setUnityBannerId(String unityBannerId) {
+        UNITY_BANNER_ID = unityBannerId;
+    }
+
+    public static void setUnityInterstitialId(String unityInterstitialId) {
+        UNITY_INTERSTITIAL_ID = unityInterstitialId;
+    }
+
+    public static void setUnityRewardId(String unityRewardId) {
+        UNITY_REWARD_ID = unityRewardId;
     }
 
     public static void setFbNative(String fbNative) {
@@ -88,6 +130,10 @@ public class Utils {
         Utils.googlePriority = googlePriority;
     }
 
+    public static void setUnityPriority(int unityPriority) {
+        Utils.unityPriority = unityPriority;
+    }
+
     public static void setGoogleBannerHeight(int googleBannerHeight) {
 
         if (googleBannerHeight < 0 && googleBannerHeight != -2 && googleBannerHeight != -4) {
@@ -109,12 +155,35 @@ public class Utils {
 
     }
 
+    public static void setUnityBannerHeight(int unityBannerHeight) {
+
+        if (unityBannerHeight == 50 || unityBannerHeight == 60 || unityBannerHeight == 90){
+            Utils.unityBannerHeight = unityBannerHeight;
+        }else {
+            throw new IllegalArgumentException("Can't create AdSize using this height. height should be 50,90,60");
+        }
+    }
+
+    public static void setUnityBannerWidth(int unityBannerWidth) {
+
+        if (unityBannerWidth == 320 || unityBannerWidth == 468 || unityBannerWidth == 728){
+            Utils.unityBannerWidth = unityBannerWidth;
+        }else {
+            throw new IllegalArgumentException("Can't create AdSize using this height. height should be 320,468,728");
+        }
+    }
+
+    public static void setUnityGameId(String unityGameId) {
+        UNITY_GAME_ID = unityGameId;
+    }
+
     public static List<Integer> sorting(){
 
         List<Integer> integerList = new ArrayList<>();
 
         integerList.add(Utils.fbPriority);
         integerList.add(Utils.googlePriority);
+        integerList.add(Utils.unityPriority);
 
         Collections.sort(integerList, Collections.reverseOrder());
 

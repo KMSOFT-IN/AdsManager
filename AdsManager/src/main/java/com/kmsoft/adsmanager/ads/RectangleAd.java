@@ -1,9 +1,12 @@
 package com.kmsoft.adsmanager.ads;
 
+import static com.google.ads.AdRequest.LOGTAG;
 import static com.kmsoft.adsmanager.Constants.Utils.sorting;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -17,6 +20,12 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.LoadAdError;
 import com.kmsoft.adsmanager.Constants.Utils;
+import com.unity3d.ads.IUnityAdsInitializationListener;
+import com.unity3d.ads.UnityAds;
+import com.unity3d.services.banners.BannerErrorInfo;
+import com.unity3d.services.banners.BannerView;
+import com.unity3d.services.banners.UnityBannerSize;
+import com.unity3d.services.banners.view.BannerPosition;
 
 import java.util.List;
 
@@ -25,6 +34,7 @@ public class RectangleAd {
     Ad fbAd;
     AdView fbAdView;
     com.google.android.gms.ads.AdView googleAdView;
+    BannerView unityBanner;
     boolean isGoogleAdLoaded = false;
     Context context;
     ViewGroup adContainer;
@@ -52,12 +62,7 @@ public class RectangleAd {
         });
         googleAdView.loadAd(adRequest);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showAd();
-            }
-        }, 2500);
+        loadUnityAd();
     }
 
     public void loadFbAd() {
@@ -101,15 +106,70 @@ public class RectangleAd {
                     Toast.makeText(context, "fb Ad show", Toast.LENGTH_SHORT).show();
                     break;
                 }
-
             } else if (priorityList.get(i) == Utils.googlePriority) {
                 if (isGoogleAdLoaded) {
                     adContainer.addView(googleAdView);
                     Toast.makeText(context, "google Ad show", Toast.LENGTH_SHORT).show();
                     break;
                 }
+            } else if (priorityList.get(i) == Utils.unityPriority) {
+                if (unityBanner != null) {
+                    adContainer.addView(unityBanner);
+                    Toast.makeText(context, "unity Ad show", Toast.LENGTH_SHORT).show();
+                    break;
+                }
             }
         }
 
+    }
+
+    public void loadUnityAd() {
+
+        UnityAds.initialize(context, Utils.UNITY_GAME_ID, Utils.isUnityTest, new IUnityAdsInitializationListener() {
+            @Override
+            public void onInitializationComplete() {
+                Log.v(LOGTAG, "Unity Ads initialization complete");
+
+                unityBanner = new BannerView((Activity) context, Utils.UNITY_BANNER_ID, new UnityBannerSize(Utils.unityBannerWidth,Utils.unityBannerHeight));
+                unityBanner.setListener(new BannerView.Listener() {
+                    @Override
+                    public void onBannerLoaded(BannerView bannerAdView) {
+                        super.onBannerLoaded(bannerAdView);
+                        unityBanner = bannerAdView;
+                    }
+
+                    @Override
+                    public void onBannerFailedToLoad(BannerView bannerAdView, BannerErrorInfo errorInfo) {
+                        super.onBannerFailedToLoad(bannerAdView, errorInfo);
+
+                        unityBanner = null;
+                    }
+
+                    @Override
+                    public void onBannerClick(BannerView bannerAdView) {
+                        super.onBannerClick(bannerAdView);
+                    }
+
+                    @Override
+                    public void onBannerLeftApplication(BannerView bannerAdView) {
+                        super.onBannerLeftApplication(bannerAdView);
+                    }
+                });
+                unityBanner.load();
+
+            }
+
+            @Override
+            public void onInitializationFailed(UnityAds.UnityAdsInitializationError error, String message) {
+                Log.e(LOGTAG, "Unity Ads initialization failed: [" + error + "] " + message);
+            }
+        });
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showAd();
+            }
+        }, 2500);
     }
 }

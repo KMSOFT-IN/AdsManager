@@ -1,11 +1,13 @@
 package com.kmsoft.adsmanager.ads;
 
 
+import static com.google.ads.AdRequest.LOGTAG;
 import static com.kmsoft.adsmanager.Constants.Utils.sorting;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,16 +18,18 @@ import com.facebook.ads.RewardedInterstitialAd;
 import com.facebook.ads.RewardedInterstitialAdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback;
 import com.kmsoft.adsmanager.Constants.Utils;
 import com.kmsoft.adsmanager.listener.FbRewardInterstitial;
 import com.kmsoft.adsmanager.listener.GoogleReward;
 import com.kmsoft.adsmanager.listener.GoogleRewardItem;
+import com.unity3d.ads.IUnityAdsInitializationListener;
+import com.unity3d.ads.IUnityAdsLoadListener;
+import com.unity3d.ads.IUnityAdsShowListener;
+import com.unity3d.ads.UnityAds;
+import com.unity3d.ads.UnityAdsShowOptions;
 
 import java.util.List;
 
@@ -36,6 +40,7 @@ public class RewardInterstitialAd {
     com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd googleRewardInterstitialAd;
     FbRewardInterstitial fbRewardInterstitial;
     GoogleReward googleReward;
+    boolean isUnityLoad = false;
 
     public RewardInterstitialAd(Context context, FbRewardInterstitial fbRewardInterstitial, GoogleReward googleReward) {
         this.context = context;
@@ -86,12 +91,6 @@ public class RewardInterstitialAd {
     }
 
     private void loadGoogleRewardInterstitial() {
-        // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(context, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
 
         AdRequest adRequest = new AdRequest.Builder().build();
         // Use the test ad unit ID to load an ad.
@@ -113,12 +112,7 @@ public class RewardInterstitialAd {
                     }
                 });
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showAd();
-            }
-        }, 3000);
+        loadUnityRewardInterstitialAd();
 
     }
 
@@ -151,6 +145,69 @@ public class RewardInterstitialAd {
                 }
 
             }
+            else if (priorityList.get(i) == Utils.unityPriority){
+
+                if (isUnityLoad){
+                    UnityAds.show((Activity) context, Utils.UNITY_REWARD_ID, new UnityAdsShowOptions(), new IUnityAdsShowListener() {
+                        @Override
+                        public void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
+                            Log.e(LOGTAG, "onUnityAdsShowFailure: " + error + " - " + message);
+                        }
+
+                        @Override
+                        public void onUnityAdsShowStart(String placementId) {
+                            Log.v(LOGTAG, "onUnityAdsShowStart: " + placementId);
+                        }
+
+                        @Override
+                        public void onUnityAdsShowClick(String placementId) {
+                            Log.v(LOGTAG,"onUnityAdsShowClick: " + placementId);
+                        }
+
+                        @Override
+                        public void onUnityAdsShowComplete(String placementId, UnityAds.UnityAdsShowCompletionState state) {
+                            Log.v(LOGTAG,"onUnityAdsShowComplete: " + placementId);
+                        }
+                    });
+                    break;
+                }
+            }
         }
+    }
+
+    private void loadUnityRewardInterstitialAd(){
+        UnityAds.initialize(context, Utils.UNITY_GAME_ID, Utils.isUnityTest, new IUnityAdsInitializationListener() {
+            @Override
+            public void onInitializationComplete() {
+                Log.v(LOGTAG, "Unity Ads initialization complete");
+
+                UnityAds.load(Utils.UNITY_REWARD_ID, new IUnityAdsLoadListener() {
+                    @Override
+                    public void onUnityAdsAdLoaded(String placementId) {
+                        Log.v(LOGTAG, "Ad for " + placementId + " loaded");
+                        isUnityLoad = true;
+                    }
+
+                    @Override
+                    public void onUnityAdsFailedToLoad(String placementId, UnityAds.UnityAdsLoadError error, String message) {
+                        Log.e(LOGTAG, "Ad for " + placementId + " failed to load: [" + error + "] " + message);
+                        isUnityLoad = false;
+                    }
+                });
+            }
+
+            @Override
+            public void onInitializationFailed(UnityAds.UnityAdsInitializationError error, String message) {
+                Log.e(LOGTAG, "Unity Ads initialization failed: [" + error + "] " + message);
+                isUnityLoad = false;
+            }
+        });
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showAd();
+            }
+        }, 3500);
     }
 }
