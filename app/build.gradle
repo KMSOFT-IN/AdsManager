@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 33
     defaultConfig {
-        applicationId "com.sabithpkcmnr.facebookads"
+        applicationId "com.kmsoft.ads"
         minSdkVersion 19
         targetSdkVersion 33
         versionCode 1
@@ -17,7 +17,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    namespace 'com.sabithpkcmnr.facebookads'
+    namespace 'com.kmsoft.ads'
 }
 
 dependencies {

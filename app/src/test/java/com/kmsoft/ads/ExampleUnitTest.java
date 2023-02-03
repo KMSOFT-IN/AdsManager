@@ -1,4 +1,4 @@
-package com.sabithpkcmnr.facebookads;
+package com.kmsoft.ads;
 
 import org.junit.Test;
 

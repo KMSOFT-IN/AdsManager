@@ -1,4 +1,4 @@
-package com.sabithpkcmnr.facebookads;
+package com.kmsoft.ads;
 
 import android.app.Application;
 
@@ -6,10 +6,6 @@ import com.facebook.ads.AdSettings;
 import com.facebook.ads.AdSize;
 import com.facebook.ads.AudienceNetworkAds;
 import com.kmsoft.adsmanager.ActivityConfig;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class ActivityBase extends Application {
 
@@ -44,6 +40,7 @@ public class ActivityBase extends Application {
         // TODO set Reward Interstitial Ad data
         ActivityConfig.setGoogleRewardInterstitial("ca-app-pub-3940256099942544/5354046379");
         ActivityConfig.setFbRewardInterstitial("910721003297246_910785149957498");
+
 
         ActivityConfig.setFbRectangle("910721003297246_910775713291775");
 
