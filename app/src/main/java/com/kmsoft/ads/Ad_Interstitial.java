@@ -1,5 +1,7 @@
 package com.kmsoft.ads;
 
+import static com.kmsoft.ads.ActivityBase.interstitialAd;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -11,7 +13,6 @@ import com.kmsoft.adsmanager.ads.InterstitialAd;
 public class Ad_Interstitial extends AppCompatActivity {
 
     ProgressBar progress;
-    InterstitialAd interstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +22,7 @@ public class Ad_Interstitial extends AppCompatActivity {
         progress = findViewById(R.id.interstitial_progress);
         progress.setVisibility(View.GONE);
 
-        interstitialAd = new InterstitialAd(Ad_Interstitial.this);
-        interstitialAd.FbInterstitialAd();
+        interstitialAd.showInterstitialAd(this);
 
     }
 }

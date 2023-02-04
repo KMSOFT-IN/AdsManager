@@ -25,7 +25,6 @@ import com.unity3d.ads.UnityAds;
 import com.unity3d.services.banners.BannerErrorInfo;
 import com.unity3d.services.banners.BannerView;
 import com.unity3d.services.banners.UnityBannerSize;
-import com.unity3d.services.banners.view.BannerPosition;
 
 import java.util.List;
 
@@ -37,11 +36,10 @@ public class RectangleAd {
     BannerView unityBanner;
     boolean isGoogleAdLoaded = false;
     Context context;
-    ViewGroup adContainer;
 
-    public RectangleAd(Context context, ViewGroup adContainer) {
+
+    public RectangleAd(Context context) {
         this.context = context;
-        this.adContainer = adContainer;
     }
 
     private void loadGoogleAd() {
@@ -94,68 +92,81 @@ public class RectangleAd {
         loadGoogleAd();
     }
 
-    private void showAd() {
+    public void showRectangleAd(ViewGroup adContainer, Activity activity) {
+
+        unityBanner = new BannerView(activity, Utils.UNITY_BANNER_ID, new UnityBannerSize(Utils.unityBannerWidth,Utils.unityBannerHeight));
+        unityBanner.setListener(new BannerView.Listener() {
+            @Override
+            public void onBannerLoaded(BannerView bannerAdView) {
+                super.onBannerLoaded(bannerAdView);
+                unityBanner = bannerAdView;
+
+
+            }
+
+            @Override
+            public void onBannerFailedToLoad(BannerView bannerAdView, BannerErrorInfo errorInfo) {
+                super.onBannerFailedToLoad(bannerAdView, errorInfo);
+
+                unityBanner = null;
+            }
+
+            @Override
+            public void onBannerClick(BannerView bannerAdView) {
+                super.onBannerClick(bannerAdView);
+            }
+
+            @Override
+            public void onBannerLeftApplication(BannerView bannerAdView) {
+                super.onBannerLeftApplication(bannerAdView);
+            }
+        });
+        unityBanner.load();
 
         List<Integer> priorityList = sorting();
 
-        for (int i = 0; i < priorityList.size(); i++) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < priorityList.size(); i++) {
 
-            if (priorityList.get(i) == Utils.fbPriority) {
-                if (fbAd != null) {
-                    adContainer.addView(fbAdView);
-                    Toast.makeText(context, "fb Ad show", Toast.LENGTH_SHORT).show();
-                    break;
-                }
-            } else if (priorityList.get(i) == Utils.googlePriority) {
-                if (isGoogleAdLoaded) {
-                    adContainer.addView(googleAdView);
-                    Toast.makeText(context, "google Ad show", Toast.LENGTH_SHORT).show();
-                    break;
-                }
-            } else if (priorityList.get(i) == Utils.unityPriority) {
-                if (unityBanner != null) {
-                    adContainer.addView(unityBanner);
-                    Toast.makeText(context, "unity Ad show", Toast.LENGTH_SHORT).show();
-                    break;
+                    if (priorityList.get(i) == Utils.fbPriority) {
+                        if (fbAd != null) {
+                            adContainer.addView(fbAdView);
+//                            Toast.makeText(context, "fb Ad show", Toast.LENGTH_SHORT).show();
+                            loadFbAd();
+                            break;
+                        }
+                    } else if (priorityList.get(i) == Utils.googlePriority) {
+                        if (isGoogleAdLoaded) {
+                            adContainer.addView(googleAdView);
+//                            Toast.makeText(context, "google Ad show", Toast.LENGTH_SHORT).show();
+                            loadGoogleAd();
+                            break;
+                        }
+                    } else if (priorityList.get(i) == Utils.unityPriority) {
+
+                        if (unityBanner != null) {
+                            adContainer.addView(unityBanner);
+//                            Toast.makeText(context, "unity Ad show", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+
+                    }
                 }
             }
-        }
+        },1000);
+
+
 
     }
 
-    public void loadUnityAd() {
+    private void loadUnityAd() {
 
         UnityAds.initialize(context, Utils.UNITY_GAME_ID, Utils.isUnityTest, new IUnityAdsInitializationListener() {
             @Override
             public void onInitializationComplete() {
                 Log.v(LOGTAG, "Unity Ads initialization complete");
-
-                unityBanner = new BannerView((Activity) context, Utils.UNITY_BANNER_ID, new UnityBannerSize(Utils.unityBannerWidth,Utils.unityBannerHeight));
-                unityBanner.setListener(new BannerView.Listener() {
-                    @Override
-                    public void onBannerLoaded(BannerView bannerAdView) {
-                        super.onBannerLoaded(bannerAdView);
-                        unityBanner = bannerAdView;
-                    }
-
-                    @Override
-                    public void onBannerFailedToLoad(BannerView bannerAdView, BannerErrorInfo errorInfo) {
-                        super.onBannerFailedToLoad(bannerAdView, errorInfo);
-
-                        unityBanner = null;
-                    }
-
-                    @Override
-                    public void onBannerClick(BannerView bannerAdView) {
-                        super.onBannerClick(bannerAdView);
-                    }
-
-                    @Override
-                    public void onBannerLeftApplication(BannerView bannerAdView) {
-                        super.onBannerLeftApplication(bannerAdView);
-                    }
-                });
-                unityBanner.load();
 
             }
 
@@ -164,12 +175,5 @@ public class RectangleAd {
                 Log.e(LOGTAG, "Unity Ads initialization failed: [" + error + "] " + message);
             }
         });
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showAd();
-            }
-        }, 2500);
     }
 }

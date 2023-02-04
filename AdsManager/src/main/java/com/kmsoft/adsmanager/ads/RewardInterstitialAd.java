@@ -6,7 +6,6 @@ import static com.kmsoft.adsmanager.Constants.Utils.sorting;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -39,13 +38,11 @@ public class RewardInterstitialAd {
     RewardedInterstitialAd fbRewardedInterstitialAd;
     com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd googleRewardInterstitialAd;
     FbRewardInterstitial fbRewardInterstitial;
-    GoogleReward googleReward;
     boolean isUnityLoad = false;
 
-    public RewardInterstitialAd(Context context, FbRewardInterstitial fbRewardInterstitial, GoogleReward googleReward) {
+    public RewardInterstitialAd(Context context, FbRewardInterstitial fbRewardInterstitial) {
         this.context = context;
         this.fbRewardInterstitial = fbRewardInterstitial;
-        this.googleReward = googleReward;
     }
 
     public void loadFbRewardedInterstitial() {
@@ -63,7 +60,7 @@ public class RewardInterstitialAd {
 
             @Override
             public void onError(Ad ad, AdError adError) {
-                Toast.makeText(context, "Sorry, error on loading the ad. Try again!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Sorry, error on loading the ad. Try again!", Toast.LENGTH_SHORT).show();
                 fbRewardedInterstitialAd = null;
             }
 
@@ -116,7 +113,7 @@ public class RewardInterstitialAd {
 
     }
 
-    private void showAd() {
+    public void showRewardInterstitialAd(Activity activity,GoogleReward googleReward) {
         List<Integer> priorityList = sorting();
 
         for (int i = 0; i < priorityList.size(); i++) {
@@ -124,21 +121,24 @@ public class RewardInterstitialAd {
             if (priorityList.get(i) == Utils.fbPriority) {
                 if (fbRewardedInterstitialAd != null) {
                     fbRewardedInterstitialAd.show();
-                    Toast.makeText(context, "fb Ad show", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "fb Ad show", Toast.LENGTH_SHORT).show();
+                    loadFbRewardedInterstitial();
                     break;
                 }
 
-            } else if (priorityList.get(i) == Utils.googlePriority) {
+            }
+            else if (priorityList.get(i) == Utils.googlePriority) {
                 if (googleRewardInterstitialAd != null) {
-                    Toast.makeText(context, "google Ad show", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "google Ad show", Toast.LENGTH_SHORT).show();
                     googleRewardInterstitialAd.show(
-                            (Activity) context, new OnUserEarnedRewardListener() {
+                            activity, new OnUserEarnedRewardListener() {
                                 @Override
                                 public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                                     GoogleRewardItem googleRewardItem = new GoogleRewardItem();
                                     googleRewardItem.amount = rewardItem.getAmount();
                                     googleRewardItem.type = rewardItem.getType();
                                     googleReward.onUserEarnedReward(googleRewardItem);
+                                    loadGoogleRewardInterstitial();
                                 }
                             });
                     break;
@@ -148,7 +148,7 @@ public class RewardInterstitialAd {
             else if (priorityList.get(i) == Utils.unityPriority){
 
                 if (isUnityLoad){
-                    UnityAds.show((Activity) context, Utils.UNITY_REWARD_ID, new UnityAdsShowOptions(), new IUnityAdsShowListener() {
+                    UnityAds.show(activity, Utils.UNITY_REWARD_ID, new UnityAdsShowOptions(), new IUnityAdsShowListener() {
                         @Override
                         public void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
                             Log.e(LOGTAG, "onUnityAdsShowFailure: " + error + " - " + message);
@@ -167,6 +167,7 @@ public class RewardInterstitialAd {
                         @Override
                         public void onUnityAdsShowComplete(String placementId, UnityAds.UnityAdsShowCompletionState state) {
                             Log.v(LOGTAG,"onUnityAdsShowComplete: " + placementId);
+                            loadUnityRewardInterstitialAd();
                         }
                     });
                     break;
@@ -203,11 +204,5 @@ public class RewardInterstitialAd {
             }
         });
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showAd();
-            }
-        }, 3500);
     }
 }

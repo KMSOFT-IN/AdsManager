@@ -10,7 +10,6 @@ import com.kmsoft.adsmanager.ads.BannerAd;
 public class Ad_Banner extends AppCompatActivity {
 
     RelativeLayout adContainer;
-    BannerAd bannerAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,9 +18,7 @@ public class Ad_Banner extends AppCompatActivity {
 
         adContainer = findViewById(R.id.ad_banner_50);
 
-        bannerAd = new BannerAd(Ad_Banner.this,adContainer);
-
-        bannerAd.loadFbAd();
+        ActivityBase.bannerAd.showBannerAd(adContainer,Ad_Banner.this);
 
     }
 

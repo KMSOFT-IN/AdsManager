@@ -40,13 +40,11 @@ public class Reward_Ad {
     RewardedAd googleRewardVideoAd;
     Context context;
     FbReward fbReward;
-    GoogleReward googleReward;
     boolean isUnityLoad = false;
 
-    public Reward_Ad(Context context, FbReward fbReward, GoogleReward googleReward) {
+    public Reward_Ad(Context context, FbReward fbReward ) {
         this.context = context;
         this.fbReward = fbReward;
-        this.googleReward = googleReward;
     }
 
     public void loadFbRewardVideo() {
@@ -65,7 +63,7 @@ public class Reward_Ad {
 
             @Override
             public void onError(Ad ad, AdError adError) {
-                Toast.makeText(context, "Sorry, error on loading the ad. Try again!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Sorry, error on loading the ad. Try again!", Toast.LENGTH_SHORT).show();
                 fbRewardedVideoAd = null;
             }
 
@@ -93,7 +91,7 @@ public class Reward_Ad {
         loadGoogleRewardVideo();
     }
 
-    private void showAd() {
+    public void showRewardAd(Activity activity,GoogleReward googleReward) {
         List<Integer> priorityList = sorting();
 
         for (int i = 0; i < priorityList.size(); i++) {
@@ -101,21 +99,23 @@ public class Reward_Ad {
             if (priorityList.get(i) == Utils.fbPriority) {
                 if (fbRewardedVideoAd != null) {
                     fbRewardedVideoAd.show();
-                    Toast.makeText(context, "fb Ad show", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "fb Ad show", Toast.LENGTH_SHORT).show();
+                    loadFbRewardVideo();
                     break;
                 }
 
             } else if (priorityList.get(i) == Utils.googlePriority) {
                 if (googleRewardVideoAd != null) {
-                    Toast.makeText(context, "google Ad show", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "google Ad show", Toast.LENGTH_SHORT).show();
                     googleRewardVideoAd.show(
-                            (Activity) context, new OnUserEarnedRewardListener() {
+                            activity, new OnUserEarnedRewardListener() {
                                 @Override
                                 public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                                     GoogleRewardItem googleRewardItem = new GoogleRewardItem();
                                     googleRewardItem.amount = rewardItem.getAmount();
                                     googleRewardItem.type = rewardItem.getType();
                                     googleReward.onUserEarnedReward(googleRewardItem);
+                                    loadGoogleRewardVideo();
                                 }
                             });
                     break;
@@ -125,7 +125,7 @@ public class Reward_Ad {
             else if (priorityList.get(i) == Utils.unityPriority){
 
                 if (isUnityLoad){
-                    UnityAds.show((Activity) context, Utils.UNITY_REWARD_ID, new UnityAdsShowOptions(), new IUnityAdsShowListener() {
+                    UnityAds.show(activity, Utils.UNITY_REWARD_ID, new UnityAdsShowOptions(), new IUnityAdsShowListener() {
                         @Override
                         public void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
                             Log.e(LOGTAG, "onUnityAdsShowFailure: " + error + " - " + message);
@@ -144,6 +144,7 @@ public class Reward_Ad {
                         @Override
                         public void onUnityAdsShowComplete(String placementId, UnityAds.UnityAdsShowCompletionState state) {
                             Log.v(LOGTAG,"onUnityAdsShowComplete: " + placementId);
+                            loadUnityRewardAd();
                         }
                     });
                     break;
@@ -201,13 +202,6 @@ public class Reward_Ad {
                 isUnityLoad = false;
             }
         });
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showAd();
-            }
-        }, 3500);
     }
 
 }

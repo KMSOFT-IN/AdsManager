@@ -5,9 +5,7 @@ import static com.kmsoft.adsmanager.Constants.Utils.sorting;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -17,9 +15,6 @@ import com.facebook.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.kmsoft.adsmanager.Constants.Utils;
 import com.unity3d.ads.IUnityAdsInitializationListener;
@@ -76,7 +71,8 @@ public class InterstitialAd {
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                         // Handle the error
                         String error = String.format("domain: %s, code: %d, message: %s", loadAdError.getDomain(), loadAdError.getCode(), loadAdError.getMessage());
-                        Toast.makeText(context, "onAdFailedToLoad() with error: " + error, Toast.LENGTH_SHORT).show();
+                        System.out.println("onAdFailedToLoad() with error: " + error);
+//                        Toast.makeText(context, "onAdFailedToLoad() with error: " + error, Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -84,7 +80,7 @@ public class InterstitialAd {
 
     }
 
-    private void showAd() {
+    public void showInterstitialAd(Activity activity) {
 
         List<Integer> priorityList = sorting();
 
@@ -93,19 +89,21 @@ public class InterstitialAd {
             if (priorityList.get(i) == Utils.fbPriority){
                 if (FbInterstitialAd != null) {
                     FbInterstitialAd.show();
-                    Toast.makeText(context, "fb Ad show", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "fb Ad show", Toast.LENGTH_SHORT).show();
+                    FbInterstitialAd();
                     break;
                 }
             } else if (priorityList.get(i) == Utils.googlePriority){
                 if (googleInterstitialAd != null) {
-                    googleInterstitialAd.show((Activity) context);
-                    Toast.makeText(context, "google Ad show", Toast.LENGTH_SHORT).show();
+                    googleInterstitialAd.show(activity);
+//                    Toast.makeText(context, "google Ad show", Toast.LENGTH_SHORT).show();
+                    GoogleInterstitialAd();
                     break;
                 }
             } else if (priorityList.get(i) == Utils.unityPriority){
 
                 if (isUnityLoad){
-                    UnityAds.show((Activity) context, Utils.UNITY_INTERSTITIAL_ID, new UnityAdsShowOptions(), new IUnityAdsShowListener() {
+                    UnityAds.show(activity, Utils.UNITY_INTERSTITIAL_ID, new UnityAdsShowOptions(), new IUnityAdsShowListener() {
                         @Override
                         public void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
                             Log.e(LOGTAG, "onUnityAdsShowFailure: " + error + " - " + message);
@@ -124,6 +122,7 @@ public class InterstitialAd {
                         @Override
                         public void onUnityAdsShowComplete(String placementId, UnityAds.UnityAdsShowCompletionState state) {
                             Log.v(LOGTAG,"onUnityAdsShowComplete: " + placementId);
+                            UnityInterstitialAd();
                         }
                     });
                     break;
@@ -137,7 +136,7 @@ public class InterstitialAd {
         AbstractAdListener adListener = new AbstractAdListener() {
             @Override
             public void onError(Ad ad, AdError error) {
-                Toast.makeText(context, "Error loading ad: " + error.getErrorMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Error loading ad: " + error.getErrorMessage(), Toast.LENGTH_SHORT).show();
                 super.onError(ad, error);
                 FbInterstitialAd = null;
             }
@@ -198,12 +197,5 @@ public class InterstitialAd {
                 isUnityLoad = false;
             }
         });
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showAd();
-            }
-        }, 3500);
     }
 }
