@@ -1,2 +1,3 @@
 
-[![](https://jitpack.io/v/smitKmsoft/AdsManager.svg)](https://jitpack.io/#smitKmsoft/AdsManager)
+[![](https://jitpack.io/v/KMSOFT-IN/AdsManager.svg)](https://jitpack.io/#KMSOFT-IN/AdsManager)
+
