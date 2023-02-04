@@ -104,7 +104,8 @@ public class Reward_Ad {
                     break;
                 }
 
-            } else if (priorityList.get(i) == Utils.googlePriority) {
+            }
+            else if (priorityList.get(i) == Utils.googlePriority) {
                 if (googleRewardVideoAd != null) {
 //                    Toast.makeText(context, "google Ad show", Toast.LENGTH_SHORT).show();
                     googleRewardVideoAd.show(
@@ -147,6 +148,7 @@ public class Reward_Ad {
                             loadUnityRewardAd();
                         }
                     });
+
                     break;
                 }
             }
