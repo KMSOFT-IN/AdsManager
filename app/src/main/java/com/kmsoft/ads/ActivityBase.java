@@ -31,16 +31,6 @@ public class ActivityBase extends Application implements FbReward, FbRewardInter
             Utils.setTestMode(true);
         }
 
-        // TODO set size
-        Utils.setFbBannerHeight(50);
-        Utils.setGoogleBannerHeight(50);
-        Utils.setUnityBannerHeight(50);
-        Utils.setUnityBannerWidth(320);
-
-        // TODO set Priority
-        Utils.setFbPriority(4);
-        Utils.setGooglePriority(2);
-        Utils.setUnityPriority(3);
 
         // TODO set Banner Ad Data
         Utils.setFbBannerId("910721003297246_910723819963631");
@@ -66,7 +56,18 @@ public class ActivityBase extends Application implements FbReward, FbRewardInter
         // TODO set Unity GameId
         Utils.setUnityGameId("5147445");
 
+        // TODO set size
+        Utils.setFbBannerHeight(50);
+        Utils.setGoogleBannerHeight(50);
+        Utils.setUnityBannerHeight(50);
+        Utils.setUnityBannerWidth(320);
 
+        // TODO set Priority
+        Utils.setFbPriority(4);
+        Utils.setGooglePriority(2);
+        Utils.setUnityPriority(3);
+
+        // TODO load Ads
         bannerAd = new BannerAd(this);
         rectangleAd = new RectangleAd(this);
         interstitialAd = new InterstitialAd(this);
