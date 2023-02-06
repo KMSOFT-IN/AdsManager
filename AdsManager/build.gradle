@@ -10,7 +10,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.github.KMSOFT-IN'
                 artifactId = 'adsmanager'
-                version = '1.0.0'
+                version = '1.0.2'
             }
         }
     }
