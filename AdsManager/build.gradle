@@ -8,10 +8,9 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-
                 groupId = 'com.github.KMSOFT-IN'
-                artifactId = 'adsManager'
-                version = '1.0.5'
+                artifactId = 'adsmanager'
+                version = '1.0.0'
             }
         }
     }
