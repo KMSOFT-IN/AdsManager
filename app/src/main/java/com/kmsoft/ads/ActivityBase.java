@@ -30,6 +30,8 @@ public class ActivityBase extends Application implements FbReward, FbRewardInter
             Utils.setTestMode(true);
         }
 
+        //TODO set applicationId for Google
+        Utils.setGoogleApplicationId("ca-app-pub-3940256099942544~3347511713");
 
         // TODO set Banner Ad Data
         Utils.setFbBannerId("910721003297246_910723819963631");
@@ -63,7 +65,7 @@ public class ActivityBase extends Application implements FbReward, FbRewardInter
 
         // TODO set Priority
         Utils.setFbPriority(4);
-        Utils.setGooglePriority(2);
+        Utils.setGooglePriority(6);
         Utils.setUnityPriority(5);
 
         // TODO load Ads

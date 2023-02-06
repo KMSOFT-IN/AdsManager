@@ -3,6 +3,9 @@ package com.kmsoft.adsmanager.Constants;
 import static com.google.ads.AdRequest.LOGTAG;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -30,6 +33,7 @@ public class Utils {
     public static String FB_REWARD;
     public static String FB_REWARD_INTERSTITIAL;
 
+    public static String GOOGLE_APPLICATION_ID;
     public static String GOOGLE_BANNER_ID;
     public static String GOOGLE_INTERSTITIAL;
     public static String GOOGLE_REWARD;
@@ -51,8 +55,10 @@ public class Utils {
     public static int googleBannerHeight;
     public static int unityBannerHeight;
     public static int unityBannerWidth;
+    public static Context baseContext;
 
     public static void initialize(Context context){
+        baseContext = context;
         AudienceNetworkAds.initialize(context);
 
         // Initialize the Mobile Ads SDK.
@@ -68,6 +74,17 @@ public class Utils {
     public static void setTestMode(boolean result){
         AdSettings.setTestMode(result);
         isUnityTest = result;
+    }
+
+    public static void setGoogleApplicationId(String googleApplicationId) {
+        GOOGLE_APPLICATION_ID = googleApplicationId;
+
+        try {
+            ApplicationInfo ai = baseContext.getPackageManager().getApplicationInfo(baseContext.getPackageName(), PackageManager.GET_META_DATA);
+            ai.metaData.putString("com.google.android.gms.ads.APPLICATION_ID", GOOGLE_APPLICATION_ID);//you can replace your key APPLICATION_ID here
+        } catch (PackageManager.NameNotFoundException | NullPointerException ignored) {
+
+        }
     }
 
     public static void setUnityBannerId(String unityBannerId) {
