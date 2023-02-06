@@ -1,7 +1,6 @@
 package com.kmsoft.ads;
 
 import android.app.Application;
-import android.widget.Toast;
 
 import com.kmsoft.adsmanager.Constants.Utils;
 import com.kmsoft.adsmanager.ads.BannerAd;
